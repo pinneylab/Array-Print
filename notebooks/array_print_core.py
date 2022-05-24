@@ -1,4 +1,5 @@
 import os
+from unittest import skip
 
 import numpy as np
 import pandas as pd
@@ -7,14 +8,31 @@ from random import shuffle
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 
+# 
 def csv_to_df(library_csv):
     csv_filepath = library_csv._selected_path + '/' + library_csv._selected_filename
     library_df = pd.read_csv(csv_filepath)
     column_names = list(library_df.columns)
     display(library_df)
-    library_members = library_df['plate position'].to_list()
+    library_members = library_df['plate_position'].to_list()
 
     return library_df, column_names, library_members
+
+def count_replicates(library_df, total_columns, total_rows, empty_columns, skip_rows):
+    # calculate available positions on chip
+    library_members = set(library_df['plate_position'])
+    library_size = len(library_members)
+    empty_rows = total_rows/2
+    columns = total_columns - empty_columns
+    rows = total_rows
+    replicates = int((rows * columns)/(library_size))
+
+    if skip_rows == 'n':
+        print('Library contains', library_size, 'members. Will array', int(replicates), 'replicates per library member.')
+    else:
+        print('Library contains', library_size, 'members. Accounting for skipped rows, the script will array', int(replicates/2), 'replicates per library member.')
+
+    return library_members, library_size, empty_rows, columns, rows, replicates
 
 def generate_array(filename, library_df, total_columns, total_rows, skip_rows, column_names):
 
@@ -53,14 +71,15 @@ def generate_array(filename, library_df, total_columns, total_rows, skip_rows, c
     print(print_df)
     
     # Sum library member counts
-    counts = print_df.apply(pd.value_counts, dropna=False)
+    counts = print_df.apply(pd.value_counts, dropna=True)
     counts['Replicate counts'] = counts.sum(axis=1)
-    counts = counts['Replicate counts']
-    counts['Blank wells'] = counts[np.nan]
-    counts = counts.drop(labels = [np.nan])
+    # counts = counts['Replicate counts']
+    if skip_rows == 'y':
+        counts['Blank wells'] = counts[np.nan]
+        counts = counts.drop(labels = [np.nan])
     
     print('Library counts:')
-    display(counts.sort_values())
+    # display(counts.sort_values())
     
     # Save array
     cwd = os.getcwd()
@@ -77,7 +96,7 @@ def generate_array(filename, library_df, total_columns, total_rows, skip_rows, c
 
     # # plot slide
     # im = plt.imshow(print_array)
-    # library_mems = library_df['plate position'].to_list()
+    # library_mems = library_df['plate_position'].to_list()
     # library_indexed = dict(zip(library_mems, range(len(library_mems))))
 
     # values = list(library_indexed.values())
@@ -90,11 +109,11 @@ def generate_array(filename, library_df, total_columns, total_rows, skip_rows, c
     # plt.savefig("%s.png" % filename, dpi = 300, transparent = False)
     # plt.show()
 
-    ax = counts.plot.bar(x='Library Member', y='Replicates')
-    plt.xlabel('Library Member')
-    plt.ylabel('Replicates')
-    plt.tight_layout()
-    plt.show()
+    # ax = counts.plot.bar(x='Library Member', y='Replicates')
+    # plt.xlabel('Library Member')
+    # plt.ylabel('Replicates')
+    # plt.tight_layout()
+    # plt.show()
 
     # fig, ax = plt.subplots(nrows=2, ncols=2)
 
