@@ -1,2 +1,3 @@
-# ignore any personal workspace folders
+# ignore any personal workspace folders and hidden files
 *personal*
+.*
