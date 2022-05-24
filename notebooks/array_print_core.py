@@ -1,7 +1,3 @@
-#!/usr/bin/env python3
-
-"""Data handling and array generation
-"""
 
 import os
 from unittest import skip
@@ -34,14 +30,8 @@ def count_replicates(library_df, total_columns, total_rows, empty_columns, skip_
 
     if skip_rows == 'n':
         print('Library contains', library_size, 'members. Will array', int(replicates), 'replicates per library member.')
-    elif skip_rows == 'y':
+    else:
         print('Library contains', library_size, 'members. Accounting for skipped rows, the script will array', int(replicates/2), 'replicates per library member.')
-    elif (empty_columns != 0) and (skip_rows == 'n'):
-        print('Library contains', library_size, 'members. Accounting for skipped columns, the script will array', int(replicates)-(empty_columns*total_rows), 'replicates per library member.')
-    elif (empty_columns != 0) and (skip_rows == 'y'):
-        print('Library contains', library_size, 'members. Accounting for skipped rows and columns, the script will array', (int(replicates)-(empty_columns*total_rows))/2, 'replicates per library member.')
-
-
 
     return library_members, library_size, empty_rows, columns, rows, replicates
 
