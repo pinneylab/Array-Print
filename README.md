@@ -1,4 +1,4 @@
-<img src="../images/array_print.png" alt="Array Print" align="right"/>
+<img src="images/array_print.png" alt="Array Print" align="right"/>
 
 # Array Print
 Array printing python notebook for use with a Scienion liquid-handling robot.
