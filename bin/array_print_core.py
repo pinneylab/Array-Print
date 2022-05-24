@@ -32,16 +32,14 @@ def count_replicates(library_df, total_columns, total_rows, empty_columns, skip_
     rows = total_rows
     replicates = int((rows * columns)/(library_size))
 
-    if skip_rows == 'n':
+    if (empty_columns != 0) and (skip_rows == 'n'):
+        print('Library contains', library_size, 'members. Accounting for skipped columns, the script will array', int(replicates), 'replicates per library member.')
+    elif (empty_columns != 0) and (skip_rows == 'y'):
+        print('Library contains', library_size, 'members. Accounting for skipped rows and columns, the script will array', int(replicates/2), 'replicates per library member.')
+    elif skip_rows == 'n':
         print('Library contains', library_size, 'members. Will array', int(replicates), 'replicates per library member.')
     elif skip_rows == 'y':
         print('Library contains', library_size, 'members. Accounting for skipped rows, the script will array', int(replicates/2), 'replicates per library member.')
-    elif (empty_columns != 0) and (skip_rows == 'n'):
-        print('Library contains', library_size, 'members. Accounting for skipped columns, the script will array', int(replicates)-(empty_columns*total_rows), 'replicates per library member.')
-    elif (empty_columns != 0) and (skip_rows == 'y'):
-        print('Library contains', library_size, 'members. Accounting for skipped rows and columns, the script will array', (int(replicates)-(empty_columns*total_rows))/2, 'replicates per library member.')
-
-
 
     return library_members, library_size, empty_rows, columns, rows, replicates
 
@@ -84,13 +82,12 @@ def generate_array(filename, library_df, total_columns, total_rows, skip_rows, c
     # Sum library member counts
     counts = print_df.apply(pd.value_counts, dropna=True)
     counts['Replicate counts'] = counts.sum(axis=1)
-    # counts = counts['Replicate counts']
+
     if skip_rows == 'y':
         counts['Blank wells'] = counts[np.nan]
         counts = counts.drop(labels = [np.nan])
     
     print('Library counts:')
-    # display(counts.sort_values())
     
     # Save array
     cwd = os.getcwd()
