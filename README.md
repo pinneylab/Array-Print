@@ -1,6 +1,3 @@
-# Array-Print
-Array printing python notebook for use with Scienion liquid-handling robot.
-
 <img src="../images/array_print.png" alt="Array Print" align="right"/>
 
 # Array Print
