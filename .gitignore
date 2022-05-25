@@ -1,3 +1,6 @@
 # ignore any personal workspace folders and hidden files
 *personal*
 .*
+.DS_Store
+.vscode
+.vscode
