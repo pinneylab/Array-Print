@@ -77,6 +77,7 @@ def generate_array(filename, library_df, total_columns, total_rows, skip_rows, c
     # counts = counts['Replicate counts']
     if skip_rows == 'y':
         counts['Blank wells'] = counts[np.nan]
+        print("Made it"!)
         counts = counts.drop(labels = [np.nan])
     
     print('Library counts:')

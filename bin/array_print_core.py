@@ -78,16 +78,18 @@ def generate_array(filename, library_df, total_columns, total_rows, skip_rows, c
         print_df.iloc[1::2] = np.nan
 
     print(print_df)
-    
-    # Sum library member counts
-    counts = print_df.apply(pd.value_counts, dropna=True)
-    counts['Replicate counts'] = counts.sum(axis=1)
 
-    if skip_rows == 'y':
-        counts['Blank wells'] = counts[np.nan]
-        counts = counts.drop(labels = [np.nan])
-    
-    print('Library counts:')
+    # Sum library member counts
+    ### COMMENTING OUT FOR NOW AS IS BREAKPOINT
+#     counts = print_df.apply(pd.value_counts, dropna=True)
+
+#     counts['Replicate counts'] = counts.sum(axis=1)
+
+#     if skip_rows == 'y':
+#         counts['Blank wells'] = counts[np.nan]
+#         counts = counts.drop(labels = [np.nan])
+
+    #     print('Library counts:')
     
     # Save array
     cwd = os.getcwd()
